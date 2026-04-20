@@ -1,0 +1,2471 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Училишна библиотека - СОУ „Љупчо Сантов"</title>
+    <meta name="description" content="Систем за управување со училишна библиотека - каталог на книги, пребарување, позајмување, враќање и инвентар. СОУ Гимназија Љупчо Сантов, Кочани." />
+    <meta name="keywords" content="библиотека, книги, лектири, позајмување, училиште, Љупчо Сантов, Кочани" />
+    <link rel="icon" type="image/png" href="https://public.readdy.ai/ai/img_res/c9e78691-94cf-44e9-a6c5-525bf99dccb8.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(to bottom right, #fffbeb, #ffedd5, #ffe4e6);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .background-image {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.1;
+            background-image: url('https://readdy.ai/api/search-image?query=Ancient%20library%20interior%20with%20wooden%20bookshelves%20filled%20with%20classic%20literature%20books%20warm%20lighting%20scholarly%20atmosphere%20educational%20environment%20peaceful%20reading%20space%20traditional%20architecture%20soft%20golden%20tones%20academic%20setting%20timeless%20knowledge%20sanctuary&width=1920&height=1080&seq=librarybg1&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .header-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            height: 64px;
+            width: auto;
+        }
+
+        .header-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-text p {
+            font-size: 0.875rem;
+            color: #475569;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: #475569;
+            margin-bottom: 3rem;
+            max-width: 48rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: #14b8a6;
+            color: white;
+            font-size: 1.125rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .hero-button:hover {
+            background: #0d9488;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-button i {
+            margin-right: 0.75rem;
+            font-size: 1.5rem;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 4rem 2rem;
+        }
+
+        .features-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: #ccfbf1;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .feature-icon i {
+            font-size: 1.875rem;
+            color: #0d9488;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-description {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .nav-tabs.active {
+            display: block;
+        }
+
+        .nav-tabs-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            color: #475569;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: #0f172a;
+            border-bottom-color: #cbd5e1;
+        }
+
+        .nav-tab.active {
+            color: #0d9488;
+            border-bottom-color: #14b8a6;
+        }
+
+        .nav-tab i {
+            margin-right: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #e2e8f0;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-contact {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        /* Home Button */
+        .home-button {
+            display: none;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s;
+            white-space: nowrap;
+            margin-left: auto;
+        }
+
+        .home-button:hover {
+            color: #0f172a;
+        }
+
+        .home-button i {
+            margin-right: 0.5rem;
+        }
+
+        .home-button.active {
+            display: block;
+        }
+
+        /* Section Content */
+        .section-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            background: white;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #14b8a6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #14b8a6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0d9488;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: #334155;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 9999px;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .stat-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon i {
+            font-size: 1.25rem;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* Due Date Display */
+        .due-date-display {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f0fdfa;
+            border-radius: 0.5rem;
+            border: 1px solid #99f6e4;
+        }
+
+        .due-date-label {
+            font-size: 0.875rem;
+            color: #0f766e;
+            margin-bottom: 0.25rem;
+        }
+
+        .due-date-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0d9488;
+        }
+
+        /* Catalog Grid */
+        .catalog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .book-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .book-cover {
+            position: relative;
+            height: 280px;
+            background: #f1f5f9;
+            overflow: hidden;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .book-card:hover .book-cover img {
+            transform: scale(1.05);
+        }
+
+        .availability-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .book-info {
+            padding: 1rem;
+        }
+
+        .book-title {
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-author {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .book-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .book-category {
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 0.75rem;
+            max-width: 48rem;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            flex: 1;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #475569;
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .modal-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .detail-item label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-item p {
+            color: #0f172a;
+        }
+
+        .detail-item .isbn {
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        .copies-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .copy-stat label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .copy-stat .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Search Section */
+        .search-controls {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+        }
+
+        .search-input-wrapper i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #14b8a6;
+        }
+
+        .search-by-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .search-by-btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .search-by-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .search-by-btn.active {
+            background: #14b8a6;
+            color: white;
+            box-shadow: 0 4px 6px rgba(20, 184, 166, 0.2);
+        }
+
+        .search-by-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .results-count {
+            color: #64748b;
+        }
+
+        .results-count strong {
+            color: #0f172a;
+        }
+
+        .reset-filters {
+            font-size: 0.875rem;
+            color: #14b8a6;
+            background: none;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        .reset-filters:hover {
+            color: #0d9488;
+        }
+
+        .reset-filters i {
+            margin-right: 0.25rem;
+        }
+
+        .search-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .search-result-card {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.25rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .search-result-card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-content {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .result-image {
+            width: 80px;
+            height: 112px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        .result-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .result-title {
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .result-author {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            font-size: 1.125rem;
+        }
+
+        .empty-state .subtitle {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Inventory Section Styles */
+        .inventory-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .filter-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .filter-btn.active {
+            background: #14b8a6;
+            color: white;
+            box-shadow: 0 4px 6px rgba(20, 184, 166, 0.2);
+        }
+
+        .filter-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .sort-control {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sort-control label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #334155;
+            white-space: nowrap;
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: #14b8a6;
+        }
+
+        .book-thumbnail {
+            width: 48px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .book-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .book-cell-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-cell-title {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        .progress-bar.high {
+            background: #10b981;
+        }
+
+        .progress-bar.medium {
+            background: #f59e0b;
+        }
+
+        .progress-bar.low {
+            background: #ef4444;
+        }
+
+        .progress-text {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .catalog-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-by-buttons {
+                flex-direction: column;
+            }
+
+            .search-results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .inventory-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+            }
+
+            .sort-control {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-image"></div>
+    
+    <div class="content-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="header-container">
+                <img src="https://public.readdy.ai/ai/img_res/c9e78691-94cf-44e9-a6c5-525bf99dccb8.png" alt="Лого" class="logo">
+                <div class="header-text">
+                    <h1 id="header-title">СОУ „Љупчо Сантов"</h1>
+                    <p id="header-subtitle">Кочани</p>
+                </div>
+                <button class="home-button" id="homeButton">
+                    <i class="ri-home-line"></i>
+                    Почетна
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs" id="navTabs">
+            <div class="nav-tabs-container">
+                <button class="nav-tab active" data-section="catalog">
+                    <i class="ri-book-line"></i>
+                    Каталог
+                </button>
+                <button class="nav-tab" data-section="search">
+                    <i class="ri-search-line"></i>
+                    Пребарување
+                </button>
+                <button class="nav-tab" data-section="borrowing">
+                    <i class="ri-hand-coin-line"></i>
+                    Позајмување
+                </button>
+                <button class="nav-tab" data-section="returns">
+                    <i class="ri-arrow-go-back-line"></i>
+                    Враќање
+                </button>
+                <button class="nav-tab" data-section="inventory">
+                    <i class="ri-stack-line"></i>
+                    Инвентар
+                </button>
+                <button class="nav-tab" data-section="about">
+                    <i class="ri-information-line"></i>
+                    За нас
+                </button>
+                <button class="nav-tab" data-section="admin">
+                    <i class="ri-settings-3-line"></i>
+                    Администрација
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section (Home) -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-container">
+                <h2 class="hero-title">Добредојдовте во училишната библиотека</h2>
+                <p class="hero-description">
+                    Модерен систем за управување со книги, позајмување и инвентар. 
+                    Пребарувајте, позајмувајте и следете ги вашите омилени книги.
+                </p>
+                <button class="hero-button" id="openLibraryButton">
+                    <i class="ri-book-open-line"></i>
+                    Отвори библиотека
+                </button>
+            </div>
+        </section>
+
+        <!-- Features Section (Home) -->
+        <section class="features-section" id="featuresSection">
+            <div class="features-container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="ri-book-line"></i>
+                        </div>
+                        <h3 class="feature-title">Каталог на книги</h3>
+                        <p class="feature-description">Детални информации за секоја книга со наслов, автор, категорија и ISBN</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="ri-search-line"></i>
+                        </div>
+                        <h3 class="feature-title">Пребарување</h3>
+                        <p class="feature-description">Напредно пребарување и филтрирање по автор, наслов и категорија</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="ri-hand-coin-line"></i>
+                        </div>
+                        <h3 class="feature-title">Позајмување</h3>
+                        <p class="feature-description">Едноставен систем за позајмување со автоматско следење на рокови</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="ri-arrow-go-back-line"></i>
+                        </div>
+                        <h3 class="feature-title">Враќање</h3>
+                        <p class="feature-description">Брзо враќање на книги со автоматско ажурирање на инвентарот</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="ri-stack-line"></i>
+                        </div>
+                        <h3 class="feature-title">Инвентар</h3>
+                        <p class="feature-description">Преглед на достапноста и статусот на сите книги во библиотеката</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="ri-settings-3-line"></i>
+                        </div>
+                        <h3 class="feature-title">Администрација</h3>
+                        <p class="feature-description">Лесно додавање, уредување и бришење на книги од системот</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Catalog Section -->
+        <main class="main-content" id="catalogSection">
+            <div class="section-content">
+                <div style="margin-bottom: 2rem;">
+                    <h2 class="section-title" style="margin-bottom: 0.5rem;">Каталог на книги</h2>
+                    <p style="color: #64748b;">Прегледајте ја целата колекција на книги во библиотеката</p>
+                </div>
+                <div class="catalog-grid" id="catalogGrid"></div>
+            </div>
+        </main>
+
+        <!-- Search Section -->
+        <main class="main-content" id="searchSection">
+            <div class="section-content">
+                <div style="margin-bottom: 2rem;">
+                    <h2 class="section-title" style="margin-bottom: 0.5rem;">Пребарување и филтрирање</h2>
+                    <p style="color: #64748b;">Пронајдете ја книгата што ви треба</p>
+                </div>
+
+                <div class="search-controls">
+                    <div class="search-grid">
+                        <div>
+                            <label class="form-label">Пребарај</label>
+                            <div class="search-input-wrapper">
+                                <i class="ri-search-line"></i>
+                                <input 
+                                    type="text" 
+                                    id="searchInput" 
+                                    class="search-input" 
+                                    placeholder="Внесете наслов, автор или ISBN..."
+                                >
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Категорија</label>
+                            <select id="categoryFilter" class="form-select">
+                                <option value="Сите категории">Сите категории</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="form-label">Пребарај по</label>
+                        <div class="search-by-buttons">
+                            <button class="search-by-btn active" data-search-by="all">
+                                <i class="ri-search-line"></i>
+                                Сè
+                            </button>
+                            <button class="search-by-btn" data-search-by="title">
+                                <i class="ri-book-line"></i>
+                                Наслов
+                            </button>
+                            <button class="search-by-btn" data-search-by="author">
+                                <i class="ri-user-line"></i>
+                                Автор
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-results-header">
+                    <p class="results-count">
+                        Пронајдени <strong id="resultsCount">0</strong> книги
+                    </p>
+                    <button class="reset-filters" id="resetFilters" style="display: none;">
+                        <i class="ri-close-circle-line"></i>
+                        Ресетирај филтри
+                    </button>
+                </div>
+
+                <div class="search-results-grid" id="searchResults"></div>
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="ri-search-line"></i>
+                    <p>Не се пронајдени книги</p>
+                    <p class="subtitle">Обидете се со различни критериуми за пребарување</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Borrowing Section -->
+        <main class="main-content" id="borrowingSection">
+            <div class="section-content">
+                <h2 class="section-title">Позајмување на книги</h2>
+                
+                <div id="borrowAlert" class="alert"></div>
+
+                <form id="borrowForm">
+                    <div class="form-group">
+                        <label class="form-label" for="bookSelect">Избери книга *</label>
+                        <select id="bookSelect" class="form-select" required>
+                            <option value="">-- Избери книга --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="studentName">Име и презиме на ученик *</label>
+                            <input type="text" id="studentName" class="form-input" placeholder="Пр: Марко Марковски" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="studentClass">Одделение *</label>
+                            <input type="text" id="studentClass" class="form-input" placeholder="Пр: 3-А" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="borrowDate">Датум на позајмување *</label>
+                        <input type="date" id="borrowDate" class="form-input" required>
+                    </div>
+
+                    <div id="dueDateDisplay" class="due-date-display" style="display: none;">
+                        <div class="due-date-label">Рок за враќање:</div>
+                        <div class="due-date-value" id="dueDateValue"></div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ri-check-line"></i>
+                        Позајми книга
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <!-- Returns Section -->
+        <main class="main-content" id="returnsSection">
+            <div class="section-content">
+                <h2 class="section-title">Враќање на книги</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #dbeafe;">
+                            <i class="ri-book-open-line" style="color: #1e40af;"></i>
+                        </div>
+                        <div class="stat-label">Активни позајмици</div>
+                        <div class="stat-value" id="activeBorrowingsCount">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fee2e2;">
+                            <i class="ri-alarm-warning-line" style="color: #991b1b;"></i>
+                        </div>
+                        <div class="stat-label">Задоцнети</div>
+                        <div class="stat-value" id="overdueBorrowingsCount">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #d1fae5;">
+                            <i class="ri-check-double-line" style="color: #065f46;"></i>
+                        </div>
+                        <div class="stat-label">Вратени денес</div>
+                        <div class="stat-value" id="returnedTodayCount">0</div>
+                    </div>
+                </div>
+
+                <div id="returnAlert" class="alert"></div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Книга</th>
+                                <th>Ученик</th>
+                                <th>Одделение</th>
+                                <th>Позајмено</th>
+                                <th>Рок</th>
+                                <th>Статус</th>
+                                <th>Акција</th>
+                            </tr>
+                        </thead>
+                        <tbody id="returnsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Inventory Section -->
+        <main class="main-content" id="inventorySection">
+            <div class="section-content">
+                <div style="margin-bottom: 2rem;">
+                    <h2 class="section-title" style="margin-bottom: 0.5rem;">Инвентар</h2>
+                    <p style="color: #64748b;">Преглед на достапноста и статусот на сите книги</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #dbeafe;">
+                            <i class="ri-book-line" style="color: #1e40af;"></i>
+                        </div>
+                        <div class="stat-label">Вкупно наслови</div>
+                        <div class="stat-value" id="totalTitlesCount">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e0e7ff;">
+                            <i class="ri-stack-line" style="color: #4338ca;"></i>
+                        </div>
+                        <div class="stat-label">Вкупно копии</div>
+                        <div class="stat-value" id="totalCopiesCount">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #d1fae5;">
+                            <i class="ri-checkbox-circle-line" style="color: #065f46;"></i>
+                        </div>
+                        <div class="stat-label">Достапни</div>
+                        <div class="stat-value" id="availableCopiesCount">0</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #fef3c7;">
+                            <i class="ri-hand-coin-line" style="color: #92400e;"></i>
+                        </div>
+                        <div class="stat-label">Позајмени</div>
+                        <div class="stat-value" id="borrowedCopiesCount">0</div>
+                    </div>
+                </div>
+
+                <div class="inventory-controls">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="ri-book-line"></i>
+                            Сите книги
+                        </button>
+                        <button class="filter-btn" data-filter="available">
+                            <i class="ri-checkbox-circle-line"></i>
+                            Достапни
+                        </button>
+                        <button class="filter-btn" data-filter="unavailable">
+                            <i class="ri-close-circle-line"></i>
+                            Недостапни
+                        </button>
+                    </div>
+
+                    <div class="sort-control">
+                        <label for="inventorySort">Сортирај по:</label>
+                        <select id="inventorySort" class="sort-select">
+                            <option value="title">Наслов (А-Ш)</option>
+                            <option value="available">Достапни копии</option>
+                            <option value="total">Вкупно копии</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Книга</th>
+                                <th>Автор</th>
+                                <th>Категорија</th>
+                                <th>ISBN</th>
+                                <th>Вкупно копии</th>
+                                <th>Достапни</th>
+                                <th>Позајмени</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- About Section -->
+        <main class="main-content" id="aboutSection">
+            <div class="section-content">
+                <div style="margin-bottom: 2rem;">
+                    <h2 class="section-title" style="margin-bottom: 0.5rem;">За нас</h2>
+                    <p style="color: #64748b;">Информации за училиштето „Љупчо Сантов" и библиотеката</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <!-- Работно време -->
+                    <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem;">
+                        <div style="width: 3rem; height: 3rem; background: #ccfbf1; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                            <i class="ri-time-line" style="font-size: 1.5rem; color: #0d9488;"></i>
+                        </div>
+                        <h3 style="font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Работно време</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="color: #334155; font-size: 0.875rem; font-weight: 500;">Понеделник</span>
+                                <span style="color: #0d9488; font-weight: 600; font-size: 0.875rem;">09:00 – 15:00</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="color: #334155; font-size: 0.875rem; font-weight: 500;">Вторник</span>
+                                <span style="color: #0d9488; font-weight: 600; font-size: 0.875rem;">09:00 – 15:00</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="color: #334155; font-size: 0.875rem; font-weight: 500;">Среда</span>
+                                <span style="color: #0d9488; font-weight: 600; font-size: 0.875rem;">09:00 – 15:00</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="color: #334155; font-size: 0.875rem; font-weight: 500;">Четврток</span>
+                                <span style="color: #0d9488; font-weight: 600; font-size: 0.875rem;">09:00 – 15:00</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <span style="color: #334155; font-size: 0.875rem; font-weight: 500;">Петок</span>
+                                <span style="color: #0d9488; font-weight: 600; font-size: 0.875rem;">09:00 – 15:00</span>
+                            </div>
+                            <div style="border-top: 1px solid #f1f5f9; margin-top: 0.5rem; padding-top: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span style="color: #94a3b8; font-size: 0.875rem;">Сабота</span>
+                                    <span style="color: #94a3b8; font-size: 0.875rem;">Затворено</span>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <span style="color: #94a3b8; font-size: 0.875rem;">Недела</span>
+                                    <span style="color: #94a3b8; font-size: 0.875rem;">Затворено</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- За библиотеката -->
+                    <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem;">
+                        <div style="width: 3rem; height: 3rem; background: #fef3c7; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                            <i class="ri-book-shelf-line" style="font-size: 1.5rem; color: #d97706;"></i>
+                        </div>
+                        <h3 style="font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">За библиотеката</h3>
+                        <p style="color: #475569; font-size: 0.875rem; line-height: 1.6;">
+                            Библиотеката е отворена за сите ученици и наставници. Позајмувањето е бесплатно и едноставно преку нашиот дигитален систем.
+                        </p>
+                    </div>
+
+                    <!-- Контакт и локација -->
+                    <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); padding: 2rem;">
+                        <div style="width: 3rem; height: 3rem; background: #ffe4e6; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem;">
+                            <i class="ri-map-pin-line" style="font-size: 1.5rem; color: #f43f5e;"></i>
+                        </div>
+                        <h3 style="font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem;">Контакт и локација</h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="ri-map-pin-2-line" style="font-size: 1.125rem; color: #64748b;"></i>
+                                </div>
+                                <span style="color: #475569; font-size: 0.875rem;">ул. Глигор Апостолов-Гочо бр. 31" Кочани</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="ri-phone-line" style="font-size: 1.125rem; color: #64748b;"></i>
+                                </div>
+                                <span style="color: #475569; font-size: 0.875rem;">033/271-246</span>
+                            </div>
+                            <div style="display: flex; align-items: start; gap: 0.75rem;">
+                                <div style="width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <i class="ri-mail-line" style="font-size: 1.125rem; color: #64748b;"></i>
+                                </div>
+                                <span style="color: #475569; font-size: 0.875rem;">ljsantov@yahoo.com</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Admin Section -->
+        <main class="main-content" id="adminSection">
+            <div class="section-content">
+                <h2 class="section-title">Администрација на книги</h2>
+
+                <div id="adminAlert" class="alert"></div>
+
+                <form id="adminForm">
+                    <input type="hidden" id="editBookId">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="adminTitle">Наслов *</label>
+                            <input type="text" id="adminTitle" class="form-input" placeholder="Наслов на книгата" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="adminAuthor">Автор *</label>
+                            <input type="text" id="adminAuthor" class="form-input" placeholder="Автор на книгата" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="adminCategory">Категорија *</label>
+                            <select id="adminCategory" class="form-select" required>
+                                <option value="">-- Избери категорија --</option>
+                                <option value="Епска поезија">Епска поезија</option>
+                                <option value="Драма">Драма</option>
+                                <option value="Роман">Роман</option>
+                                <option value="Поезија">Поезија</option>
+                                <option value="Религиозна литература">Религиозна литература</option>
+                                <option value="Легенди">Легенди</option>
+                                <option value="Басни">Басни</option>
+                                <option value="Раскази">Раскази</option>
+                                <option value="Есеи">Есеи</option>
+                                <option value="Роман во стихови">Роман во стихови</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="adminYear">Година *</label>
+                            <select id="adminYear" class="form-select" required>
+                                <option value="">-- Избери година --</option>
+                                <option value="I">I година</option>
+                                <option value="II">II година</option>
+                                <option value="III">III година</option>
+                                <option value="IV">IV година</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="adminISBN">ISBN *</label>
+                            <input type="text" id="adminISBN" class="form-input" placeholder="978-0-123456-78-9" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="adminCopies">Број на копии *</label>
+                            <input type="number" id="adminCopies" class="form-input" min="1" value="1" required>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ri-save-line"></i>
+                            <span id="adminSubmitText">Додади книга</span>
+                        </button>
+                        <button type="button" id="adminCancelBtn" class="btn btn-secondary" style="display: none;">
+                            <i class="ri-close-line"></i>
+                            Откажи
+                        </button>
+                    </div>
+                </form>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Наслов</th>
+                                <th>Автор</th>
+                                <th>Категорија</th>
+                                <th>Година</th>
+                                <th>ISBN</th>
+                                <th>Копии</th>
+                                <th>Акции</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Book Details Modal -->
+        <div class="modal" id="bookModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modalTitle"></h3>
+                    <button class="modal-close" id="modalClose">
+                        <i class="ri-close-line"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <img id="modalImage" class="modal-image" src="" alt="">
+                    </div>
+                    <div class="modal-details">
+                        <div class="detail-item">
+                            <label>Автор</label>
+                            <p id="modalAuthor"></p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Категорија</label>
+                            <p id="modalCategory"></p>
+                        </div>
+                        <div class="detail-item">
+                            <label>ISBN</label>
+                            <p class="isbn" id="modalISBN"></p>
+                        </div>
+                        <div class="detail-item">
+                            <label>Опис</label>
+                            <p id="modalDescription"></p>
+                        </div>
+                        <div class="copies-grid">
+                            <div class="copy-stat">
+                                <label>Вкупно копии</label>
+                                <p class="value" id="modalTotalCopies"></p>
+                            </div>
+                            <div class="copy-stat">
+                                <label>Достапни</label>
+                                <p class="value" id="modalAvailableCopies"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-container">
+                <p class="footer-text">СОУ „Љупчо Сантов" - Кочани</p>
+                <p class="footer-contact">ул. Глигор Апостолов-Гочо бр. 31 | 033/271-246</p>
+                <p class="footer-text" style="margin-top: 1rem; font-size: 1.125rem; font-weight: 700;">ИЗРАБОТИЛ: СТЕФАН ГОЛУБОВ</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mock Data - Books
+        const booksData = [
+            { id: 1, title: 'Гилгамеш', author: 'Асирско-вавилонски еп', category: 'Епска поезија', year: 'I', isbn: '978-608-203-045-1', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/47b474bfb3245a5d0d848846477b19cf.jpeg', description: 'Еден од најстарите познати литературни дела, епот за Гилгамеш раскажува за херојот кој трага по бесмртност.' },
+            { id: 2, title: 'Илијада', author: 'Хомер', category: 'Епска поезија', year: 'I', isbn: '978-608-203-047-5', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/f4bf6bfd2e5e771bb6b128507e7889f7.jpeg', description: 'Класичен грчки еп за Тројанската војна и херојот Ахил.' },
+            { id: 3, title: 'Одисеја', author: 'Хомер', category: 'Епска поезија', year: 'I', isbn: '978-608-203-048-2', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/06a28d55006bcbcb231e047bdd2222e2.jpeg', description: 'Епот за патувањето на Одисеј по Тројанската војна.' },
+            { id: 4, title: 'Цар Едип', author: 'Софокле', category: 'Драма', year: 'I', isbn: '978-608-203-049-9', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/5a0918b151099ecf1db5c1ad3b89765f.png', description: 'Трагедија за царот Едип и неговата судбина.' },
+            { id: 5, title: 'Панонски легенди', author: 'Народна творба', category: 'Легенди', year: 'I', isbn: '978-608-203-050-5', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/67bf6b8e9f7f00bf562f98f70e990924.jpeg', description: 'Збирка на народни легенди од панонскиот регион.' },
+            { id: 6, title: 'О писменех', author: 'Црноризец Храбар', category: 'Религиозна литература', year: 'I', isbn: '978-608-203-052-9', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/8127e3f954c48bbf215fed55d6cf1d6e.png', description: 'Средновековен текст за создавањето на словенската азбука.' },
+            { id: 7, title: 'Тристан и Изолда', author: 'Средновековна легенда', category: 'Роман', year: 'I', isbn: '978-608-203-055-0', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/236b4dcdb26683d6b5cc17a5bf040af3.png', description: 'Средновековна легенда за забранета љубов.' },
+            { id: 8, title: 'Вујко Вања', author: 'Антон Павлович Чехов', category: 'Драма', year: 'I', isbn: '978-608-203-057-4', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/22b37ede1a323dd9fd74986bc0142c4a.png', description: 'Драма за животот на руското село и неостварените соништа.' },
+            { id: 9, title: 'Божествена комедија', author: 'Данте Алигиери', category: 'Епска поезија', year: 'II', isbn: '978-608-203-058-1', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/13de0894b890b94bd329b213e6b431c7.png', description: 'Епско патување низ Пеколот, Чистилиштето и Рајот.' },
+            { id: 10, title: 'Канцониер', author: 'Франческо Петрарка', category: 'Поезија', year: 'II', isbn: '978-608-203-059-8', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/80b0fd3aa0b6ad43b741a4e18d272556.png', description: 'Збирка на љубовни сонети посветени на Лаура.' },
+            { id: 11, title: 'Декамерон', author: 'Џовани Бокачо', category: 'Раскази', year: 'II', isbn: '978-608-203-060-4', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/f0afdf1f26ec3f0c1cb2000c0de1097a.png', description: 'Збирка на 100 раскази раскажани за време на чумата.' },
+            { id: 12, title: 'Дон Кихот', author: 'Мигуел де Сервантес', category: 'Роман', year: 'II', isbn: '978-608-203-061-1', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/3b2862ae921d2658ba4816fb5dc5ac0e.png', description: 'Авантурите на витезот Дон Кихот и неговиот слуга Санчо Панса.' },
+            { id: 13, title: 'Хамлет', author: 'Вилијам Шекспир', category: 'Драма', year: 'II', isbn: '978-608-203-062-8', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/a8ab78c1aa30684a4c9015632b8d6054.png', description: 'Трагедија за принцот Хамлет и неговата одмазда.' },
+            { id: 14, title: 'Тартиф', author: 'Жан Батист Поклен Молиер', category: 'Драма', year: 'II', isbn: '978-608-203-064-2', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/189cc2ec65178a58223fd27149d146f8.png', description: 'Комедија за лицемерието и религиозната претворност.' },
+            { id: 15, title: 'Сид', author: 'Пјер Корнеј', category: 'Драма', year: 'II', isbn: '978-608-203-065-9', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/0893c3a81cde4811976e45fd772fa0e1.png', description: 'Трагикомедија за шпанскиот херој Ел Сид.' },
+            { id: 16, title: 'Александар Македонски', author: 'Жан Расин', category: 'Драма', year: 'II', isbn: '978-608-203-067-3', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/3d29176185bc5e9ef4ead617a074d551.png', description: 'Драма за големиот македонски владетел.' },
+            { id: 17, title: 'За македонските работи', author: 'К.П. Мисирков', category: 'Есеи', year: 'III', isbn: '978-608-203-074-1', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/135419aec2524acf7637bd46ec37dfbb.png', description: 'Есеи за македонскиот јазик и национален идентитет.' },
+            { id: 18, title: 'Клетници', author: 'Виктор Иго', category: 'Роман', year: 'III', isbn: '978-608-203-075-8', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/b272e6de8cf2e07d9c7aa222ad118bcd.png', description: 'Епски роман за правдата и откупувањето.' },
+            { id: 19, title: 'Страдањето на младиот Вертер', author: 'Јохан В. Гете', category: 'Роман', year: 'III', isbn: '978-608-203-076-5', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/0042c28cc625b869224e6cb3bf3be74e.png', description: 'Романтичен роман за неостварена љубов.' },
+            { id: 20, title: 'Странствувањето на Чајлд Харолд', author: 'Џ.Г. Бајрон', category: 'Поезија', year: 'III', isbn: '978-608-203-077-2', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/d73c527000eef9b970544e7dcd09eb23.png', description: 'Романтична поема за патувањата на младиот аристократ.' },
+            { id: 21, title: 'Евгениј Онегин', author: 'Александар С. Пушкин', category: 'Роман во стихови', year: 'III', isbn: '978-608-203-078-9', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/5ee318ed1fbf821677778c04358d26b0.png', description: 'Роман во стихови за руското општество во 19 век.' },
+            { id: 22, title: 'Сердарот', author: 'Григор Прличев', category: 'Епска поезија', year: 'III', isbn: '978-608-203-079-6', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/382c45280df1969e4e14911e72e1202c.png', description: 'Епска поема за македонскиот херој Марко Крале.' },
+            { id: 23, title: 'Македонска крвава свадба', author: 'Војдан Чернодрински', category: 'Драма', year: 'III', isbn: '978-608-203-080-2', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/1a2db9360926301d0e9d32037b107c8c.png', description: 'Драма за македонската борба за слобода.' },
+            { id: 24, title: 'Чичко Горио', author: 'Оноре де Балзак', category: 'Роман', year: 'III', isbn: '978-608-203-081-9', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/9d53fe74f29d02e342c2542b54c56f5a.png', description: 'Реалистичен роман за париското општество.' },
+            { id: 25, title: 'Злосторство и казна', author: 'Ф.М. Достоевски', category: 'Роман', year: 'III', isbn: '978-608-203-082-6', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/fd63d7ce2b6c29c253e5236c305aaea5.png', description: 'Психолошки роман за вината и откупувањето.' },
+            { id: 26, title: 'Смртта на Иван Илич', author: 'Л.Н. Толстој', category: 'Роман', year: 'III', isbn: '978-608-203-083-3', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/6ea850e3e53322e2b900cf46c28337f2.png', description: 'Новела за смислата на животот и смртта.' },
+            { id: 27, title: 'Печалбари', author: 'Антон Иљоски', category: 'Роман', year: 'III', isbn: '978-608-203-084-0', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/34498700192a8b1800ddc8882995a109.png', description: 'Роман за македонските печалбари.' },
+            { id: 28, title: 'Парите се отепувачка', author: 'Ристо Крле', category: 'Роман', year: 'III', isbn: '978-608-203-085-7', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/005a94e90e5b4c9d8a94453759044492.png', description: 'Социјален роман за македонското село.' },
+            { id: 29, title: 'Чорбаџи Теодос', author: 'Васил Иљоски', category: 'Роман', year: 'III', isbn: '978-608-203-086-4', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/60b8a91e178ec41a97b0bc7993becaab.png', description: 'Историски роман за македонската револуција.' },
+            { id: 30, title: 'Бели мугри', author: 'Кочо Рацин', category: 'Поезија', year: 'III', isbn: '978-608-203-087-1', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/f0236dedea4a84a79a47e8bf7cac6cd8.png', description: 'Збирка на социјална поезија.' },
+            { id: 31, title: 'Улица', author: 'Славко Јаневски', category: 'Роман', year: 'III', isbn: '978-608-203-088-8', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/489a10bd883228395cf61834b299c39a.png', description: 'Роман за животот во градот.' },
+            { id: 32, title: 'Крпен живот', author: 'Стале Попов', category: 'Роман', year: 'III', isbn: '978-608-203-089-5', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/1ac9cf21f36a340b8b4ab848a72b2d4f.png', description: 'Автобиографски роман за детството.' },
+            { id: 33, title: 'Малечката Фадета', author: 'Жорж Санд', category: 'Роман', year: 'III', isbn: '978-608-203-090-1', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/acd64a8073db91a770c9b02bc1f2fca5.png', description: 'Романтичен роман за љубовта на селото.' },
+            { id: 34, title: 'Авантурите на Артур Гордон Пим', author: 'Е.А. По', category: 'Роман', year: 'III', isbn: '978-608-203-092-5', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/98be0c688f41fdb671d61387ced73a3b.png', description: 'Авантуристички роман за морски патувања.' },
+            { id: 35, title: 'Горски венец', author: 'П.П. Његош', category: 'Епска поезија', year: 'III', isbn: '978-608-203-094-9', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/86c9c474e230a4b45d2d2bf558407db9.png', description: 'Епска поема за црногорската историја.' },
+            { id: 36, title: 'Крвава кошула', author: 'Рајко Жинзифов', category: 'Поезија', year: 'III', isbn: '978-608-203-095-6', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/489e157de120de582d71ac639ffb3994.png', description: 'Патриотска поезија за македонската борба.' },
+            { id: 37, title: 'Ревизор', author: 'Н.В. Гогољ', category: 'Драма', year: 'III', isbn: '978-608-203-096-3', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/294968f8e3154232420ac4d9e06adf3f.png', description: 'Сатирична комедија за бирократијата.' },
+            { id: 38, title: 'Две Марии', author: 'Славко Јаневски', category: 'Роман', year: 'III', isbn: '978-608-203-097-0', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/e3d1907bc338a6dff1758b5e8e7aef5a.png', description: 'Роман за љубовта и судбината.' },
+            { id: 40, title: 'Странец', author: 'Албер Ками', category: 'Роман', year: 'IV', isbn: '978-608-203-099-4', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/712ec540c7273b27715d82b3a6f21aa4.png', description: 'Егзистенцијалистички роман за отуѓеноста.' },
+            { id: 41, title: 'Чекајќи го Годо', author: 'Семјуел Бекет', category: 'Драма', year: 'IV', isbn: '978-608-203-105-2', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/408ef343305e1b7c78bbf3e6da6cccec.png', description: 'Апсурдистичка драма за чекањето.' },
+            { id: 42, title: 'Цвеќиња на злото', author: 'Шарл Бодлер', category: 'Поезија', year: 'IV', isbn: '978-608-203-106-9', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/1c30192eff89d01f7b9c0f60cc7f9b86.png', description: 'Збирка на декадентна поезија.' },
+            { id: 43, title: 'Пустина', author: 'Ѓорѓи Абаџиев', category: 'Роман', year: 'IV', isbn: '978-608-203-107-6', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/af02c577a27834fcd300767ab5bf7bdc.png', description: 'Модернистички роман за егзистенцијата.' },
+            { id: 44, title: 'Пиреј', author: 'П.М.Андреевски', category: 'Роман', year: 'IV', isbn: '978-608-203-108-3', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/48bfaab7be380f1c249ae4c32818254f.png', description: 'Историски роман за македонската емиграција.' },
+            { id: 45, title: 'Големата вода', author: 'Живко Чинго', category: 'Роман', year: 'IV', isbn: '978-608-203-109-0', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/45761e2ae015d24d4022fbf071f44046.png', description: 'Роман за детството и војната.' },
+            { id: 46, title: 'Диво месо', author: 'Горан Стефановски', category: 'Драма', year: 'IV', isbn: '978-608-203-112-0', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/317c6ae379771176e749c7ee02a29138.png', description: 'Современа драма за идентитетот.' },
+            { id: 47, title: 'Црно семе', author: 'Ташко Георгиевски', category: 'Роман', year: 'IV', isbn: '978-608-203-114-4', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/91de64cd3484d59660c619570aa99328.png', description: 'Роман за македонската историја.' },
+            { id: 48, title: 'Демијан', author: 'Херман Хесе', category: 'Роман', year: 'IV', isbn: '978-608-203-115-1', copies: 13, available: 13, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/fc5b5c7dcadbef82b6bdae516d144d2d.png', description: 'Роман за возрасувањето и самоспознанието.' },
+            { id: 49, title: 'Процес', author: 'Франц Кафка', category: 'Роман', year: 'IV', isbn: '978-608-203-116-8', copies: 12, available: 12, coverImage: 'https://static.readdy.ai/image/d5de119fd3f60ab83ad3dbb98bc70255/17fe3642f10812a4a16e464b321db624.jpeg', description: 'Сиреалистички роман за бирократијата и правдата.' }
+        ];
+
+        // Get unique categories
+        const categories = ['Сите категории', ...new Set(booksData.map(book => book.category))];
+
+        // Mock Data - Borrowings (почнуваме со празна листа - сите книги достапни)
+        let borrowingsData = [];
+
+        let nextBorrowingId = 1;
+
+        // Navigation state
+        let currentView = 'home';
+        let currentSearchBy = 'all';
+
+        // Elements
+        const openLibraryButton = document.getElementById('openLibraryButton');
+        const homeButton = document.getElementById('homeButton');
+        const heroSection = document.getElementById('heroSection');
+        const featuresSection = document.getElementById('featuresSection');
+        const navTabs = document.getElementById('navTabs');
+        const headerTitle = document.getElementById('header-title');
+        const headerSubtitle = document.getElementById('header-subtitle');
+
+        // All section elements
+        const sections = {
+            catalog: document.getElementById('catalogSection'),
+            search: document.getElementById('searchSection'),
+            borrowing: document.getElementById('borrowingSection'),
+            returns: document.getElementById('returnsSection'),
+            inventory: document.getElementById('inventorySection'),
+            about: document.getElementById('aboutSection'),
+            admin: document.getElementById('adminSection')
+        };
+
+        // Tab buttons
+        const tabButtons = document.querySelectorAll('.nav-tab');
+
+        // Modal elements
+        const bookModal = document.getElementById('bookModal');
+        const modalClose = document.getElementById('modalClose');
+
+        // Open library view
+        openLibraryButton.addEventListener('click', function() {
+            currentView = 'library';
+            heroSection.style.display = 'none';
+            featuresSection.style.display = 'none';
+            navTabs.classList.add('active');
+            homeButton.classList.add('active');
+            headerTitle.textContent = 'Училишна библиотека';
+            headerSubtitle.textContent = 'СОУ „Љупчо Сантов"';
+            
+            showSection('catalog');
+        });
+
+        // Go back to home
+        homeButton.addEventListener('click', function() {
+            currentView = 'home';
+            heroSection.style.display = 'block';
+            featuresSection.style.display = 'block';
+            navTabs.classList.remove('active');
+            homeButton.classList.remove('active');
+            headerTitle.textContent = 'СОУ „Љупчо Сантов"';
+            headerSubtitle.textContent = 'Кочани';
+            
+            Object.values(sections).forEach(section => {
+                section.classList.remove('active');
+            });
+        });
+
+        // Tab navigation
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const sectionName = this.getAttribute('data-section');
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                showSection(sectionName);
+            });
+        });
+
+        // Show section function
+        function showSection(sectionName) {
+            Object.values(sections).forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            if (sections[sectionName]) {
+                sections[sectionName].classList.add('active');
+                
+                // Initialize section content
+                if (sectionName === 'catalog') {
+                    initCatalogSection();
+                } else if (sectionName === 'search') {
+                    initSearchSection();
+                } else if (sectionName === 'borrowing') {
+                    initBorrowingSection();
+                } else if (sectionName === 'returns') {
+                    initReturnsSection();
+                } else if (sectionName === 'admin') {
+                    initAdminSection();
+                } else if (sectionName === 'inventory') {
+                    initInventorySection();
+                }
+                // Note: about section doesn't need initialization
+            }
+        }
+
+        // ===== CATALOG SECTION =====
+        function initCatalogSection() {
+            const catalogGrid = document.getElementById('catalogGrid');
+            
+            catalogGrid.innerHTML = booksData.map(book => `
+                <div class="book-card" onclick="showBookDetails(${book.id})">
+                    <div class="book-cover">
+                        <img src="${book.coverImage}" alt="${book.title}">
+                        <span class="availability-badge ${book.available > 0 ? 'badge-success' : 'badge-danger'}">
+                            ${book.available > 0 ? 'Достапна' : 'Недостапна'}
+                        </span>
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <p class="book-author">${book.author}</p>
+                        <div class="book-meta">
+                            <span class="book-category">${book.category}</span>
+                            <span>${book.available}/${book.copies} копии</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show book details modal
+        function showBookDetails(bookId) {
+            const book = booksData.find(b => b.id === bookId);
+            if (!book) return;
+
+            document.getElementById('modalTitle').textContent = book.title;
+            document.getElementById('modalImage').src = book.coverImage;
+            document.getElementById('modalAuthor').textContent = book.author;
+            document.getElementById('modalCategory').textContent = book.category;
+            document.getElementById('modalISBN').textContent = book.isbn;
+            document.getElementById('modalDescription').textContent = book.description;
+            document.getElementById('modalTotalCopies').textContent = book.copies;
+            document.getElementById('modalAvailableCopies').textContent = book.available;
+            document.getElementById('modalAvailableCopies').style.color = book.available > 0 ? '#059669' : '#dc2626';
+
+            bookModal.classList.add('show');
+        }
+
+        // Close modal
+        modalClose.addEventListener('click', function() {
+            bookModal.classList.remove('show');
+        });
+
+        bookModal.addEventListener('click', function(e) {
+            if (e.target === bookModal) {
+                bookModal.classList.remove('show');
+            }
+        });
+
+        window.showBookDetails = showBookDetails;
+
+        // ===== SEARCH SECTION =====
+        function initSearchSection() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const searchInput = document.getElementById('searchInput');
+            const searchByButtons = document.querySelectorAll('.search-by-btn');
+            const resetFilters = document.getElementById('resetFilters');
+
+            // Populate categories
+            categoryFilter.innerHTML = categories.map(cat => 
+                `<option value="${cat}">${cat}</option>`
+            ).join('');
+
+            // Search by buttons
+            searchByButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    searchByButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentSearchBy = this.getAttribute('data-search-by');
+                    performSearch();
+                });
+            });
+
+            // Search input
+            searchInput.addEventListener('input', performSearch);
+            categoryFilter.addEventListener('change', performSearch);
+
+            // Reset filters
+            resetFilters.addEventListener('click', function() {
+                searchInput.value = '';
+                categoryFilter.value = 'Сите категории';
+                currentSearchBy = 'all';
+                searchByButtons.forEach(b => b.classList.remove('active'));
+                searchByButtons[0].classList.add('active');
+                performSearch();
+            });
+
+            // Initial search
+            performSearch();
+        }
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            const resultsCount = document.getElementById('resultsCount');
+            const resetFilters = document.getElementById('resetFilters');
+            const searchResults = document.getElementById('searchResults');
+            const emptyState = document.getElementById('emptyState');
+
+            // Filter books
+            const filteredBooks = booksData.filter(book => {
+                const matchesCategory = selectedCategory === 'Сите категории' || book.category === selectedCategory;
+                
+                if (!searchTerm) return matchesCategory;
+                
+                if (currentSearchBy === 'title') {
+                    return matchesCategory && book.title.toLowerCase().includes(searchTerm);
+                } else if (currentSearchBy === 'author') {
+                    return matchesCategory && book.author.toLowerCase().includes(searchTerm);
+                } else {
+                    return matchesCategory && (
+                        book.title.toLowerCase().includes(searchTerm) ||
+                        book.author.toLowerCase().includes(searchTerm) ||
+                        book.isbn.toLowerCase().includes(searchTerm)
+                    );
+                }
+            });
+
+            // Update results count
+            resultsCount.textContent = filteredBooks.length;
+
+            // Show/hide reset button
+            if (searchTerm || selectedCategory !== 'Сите категории') {
+                resetFilters.style.display = 'block';
+            } else {
+                resetFilters.style.display = 'none';
+            }
+
+            // Render results
+            if (filteredBooks.length === 0) {
+                searchResults.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                searchResults.style.display = 'grid';
+                emptyState.style.display = 'none';
+                
+                searchResults.innerHTML = filteredBooks.map(book => `
+                    <div class="search-result-card">
+                        <div class="result-content">
+                            <img src="${book.coverImage}" alt="${book.title}" class="result-image">
+                            <div class="result-info">
+                                <h3 class="result-title">${book.title}</h3>
+                                <p class="result-author">${book.author}</p>
+                                <div class="result-badges">
+                                    <span class="badge badge-info">${book.category}</span>
+                                    <span class="badge ${book.available > 0 ? 'badge-success' : 'badge-danger'}">
+                                        ${book.available > 0 ? `${book.available} достапни` : 'Недостапна'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ===== BORROWING SECTION =====
+        function initBorrowingSection() {
+            const bookSelect = document.getElementById('bookSelect');
+            const borrowDateInput = document.getElementById('borrowDate');
+            const dueDateDisplay = document.getElementById('dueDateDisplay');
+            const dueDateValue = document.getElementById('dueDateValue');
+            const borrowAlert = document.getElementById('borrowAlert');
+            const borrowForm = document.getElementById('borrowForm');
+
+            // Set today's date as default
+            const today = new Date().toISOString().split('T')[0];
+            borrowDateInput.value = today;
+
+            // Populate book dropdown with available books
+            bookSelect.innerHTML = '<option value="">-- Избери книга --</option>';
+            booksData.filter(book => book.available > 0).forEach(book => {
+                const option = document.createElement('option');
+                option.value = book.id;
+                option.textContent = `${book.title} - ${book.author} (${book.available} достапни)`;
+                bookSelect.appendChild(option);
+            });
+
+            // Remove old listener and add new one for date change
+            const newDateInput = borrowDateInput.cloneNode(true);
+            borrowDateInput.parentNode.replaceChild(newDateInput, borrowDateInput);
+
+            newDateInput.value = today;
+            newDateInput.addEventListener('change', function() {
+                if (this.value) {
+                    const borrowDate = new Date(this.value);
+                    const dueDate = new Date(borrowDate);
+                    dueDate.setDate(dueDate.getDate() + 30);
+                    dueDateValue.textContent = dueDate.toLocaleDateString('mk-MK', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    dueDateDisplay.style.display = 'block';
+                }
+            });
+            newDateInput.dispatchEvent(new Event('change'));
+
+            // Handle form submission - replace form to remove old listeners
+            const newForm = borrowForm.cloneNode(true);
+            borrowForm.parentNode.replaceChild(newForm, borrowForm);
+
+            newForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const currentBookSelect = document.getElementById('bookSelect');
+                const currentDateInput = document.getElementById('borrowDate');
+                const bookId = parseInt(currentBookSelect.value);
+                const studentName = document.getElementById('studentName').value;
+                const studentClass = document.getElementById('studentClass').value;
+                const borrowDate = currentDateInput.value;
+
+                if (!bookId) {
+                    showAlert(borrowAlert, 'Ве молиме изберете книга.', 'error');
+                    return;
+                }
+
+                const book = booksData.find(b => b.id === bookId);
+                if (book && book.available > 0) {
+                    book.available--;
+
+                    const borrowDateObj = new Date(borrowDate);
+                    const dueDateObj = new Date(borrowDateObj);
+                    dueDateObj.setDate(dueDateObj.getDate() + 30);
+
+                    borrowingsData.push({
+                        id: nextBorrowingId++,
+                        bookId: book.id,
+                        bookTitle: book.title,
+                        studentName: studentName,
+                        studentClass: studentClass,
+                        borrowDate: borrowDate,
+                        dueDate: dueDateObj.toISOString().split('T')[0],
+                        status: 'active'
+                    });
+
+                    showAlert(borrowAlert, `Книгата "${book.title}" е успешно позајмена на ${studentName}.`, 'success');
+
+                    newForm.reset();
+                    document.getElementById('borrowDate').value = today;
+                    document.getElementById('dueDateDisplay').style.display = 'none';
+
+                    // Refresh dropdown
+                    initBorrowingSection();
+                } else {
+                    showAlert(borrowAlert, 'Книгата не е достапна.', 'error');
+                }
+            });
+        }
+
+        // ===== RETURNS SECTION =====
+        function initReturnsSection() {
+            updateReturnsStats();
+            renderReturnsTable();
+        }
+
+        function updateReturnsStats() {
+            const activeBorrowings = borrowingsData.filter(b => b.status === 'active' || b.status === 'overdue');
+            const overdueBorrowings = borrowingsData.filter(b => b.status === 'overdue');
+            
+            const today = new Date().toISOString().split('T')[0];
+            const returnedToday = borrowingsData.filter(b => b.status === 'returned' && b.returnDate === today);
+
+            document.getElementById('activeBorrowingsCount').textContent = activeBorrowings.length;
+            document.getElementById('overdueBorrowingsCount').textContent = overdueBorrowings.length;
+            document.getElementById('returnedTodayCount').textContent = returnedToday.length;
+        }
+
+        function renderReturnsTable() {
+            const tbody = document.getElementById('returnsTableBody');
+            const activeBorrowings = borrowingsData.filter(b => b.status === 'active' || b.status === 'overdue');
+
+            if (activeBorrowings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">Нема активни позајмици</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = activeBorrowings.map(borrowing => {
+                const today = new Date();
+                const dueDate = new Date(borrowing.dueDate);
+                const isOverdue = today > dueDate;
+                
+                return `
+                    <tr>
+                        <td><strong>${borrowing.bookTitle}</strong></td>
+                        <td>${borrowing.studentName}</td>
+                        <td>${borrowing.studentClass}</td>
+                        <td>${new Date(borrowing.borrowDate).toLocaleDateString('mk-MK')}</td>
+                        <td>${new Date(borrowing.dueDate).toLocaleDateString('mk-MK')}</td>
+                        <td>
+                            <span class="badge ${isOverdue ? 'badge-danger' : 'badge-success'}">
+                                ${isOverdue ? 'Задоцнета' : 'Активна'}
+                            </span>
+                        </td>
+                        <td>
+                            <button 
+                                class="btn btn-success" 
+                                onclick="returnBook(${borrowing.id})"
+                                style="padding: 0.5rem 1rem;"
+                            >
+                                <i class="ri-check-line"></i>
+                                Врати
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function returnBook(borrowingId) {
+            const borrowing = borrowingsData.find(b => b.id === borrowingId);
+            if (!borrowing) return;
+
+            // Пронајди ја книгата и зголеми го бројот на достапни копии
+            const book = booksData.find(b => b.id === borrowing.bookId);
+            if (book) {
+                book.available = Math.min(book.copies, book.available + 1);
+            }
+
+            // Ажурирај го статусот на позајмицата
+            borrowing.status = 'returned';
+            borrowing.returnDate = new Date().toISOString().split('T')[0];
+
+            const returnAlert = document.getElementById('returnAlert');
+            showAlert(returnAlert, `Книгата "${borrowing.bookTitle}" е успешно вратена.`, 'success');
+
+            updateReturnsStats();
+            renderReturnsTable();
+        }
+
+        window.returnBook = returnBook;
+
+        // ===== ADMIN SECTION =====
+        let editingBookId = null;
+
+        function initAdminSection() {
+            renderAdminTable();
+            setupAdminForm();
+        }
+
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            
+            tbody.innerHTML = booksData.map(book => `
+                <tr>
+                    <td><strong>${book.title}</strong></td>
+                    <td>${book.author}</td>
+                    <td><span class="badge badge-info">${book.category}</span></td>
+                    <td>${book.year}</td>
+                    <td>${book.isbn}</td>
+                    <td>${book.copies}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editBook(${book.id})" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">
+                            <i class="ri-edit-line"></i>
+                            Уреди
+                        </button>
+                        <button class="btn btn-danger" onclick="deleteBook(${book.id})" style="padding: 0.5rem 1rem;">
+                            <i class="ri-delete-bin-line"></i>
+                            Избриши
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function setupAdminForm() {
+            const adminForm = document.getElementById('adminForm');
+            const adminCancelBtn = document.getElementById('adminCancelBtn');
+            const adminAlert = document.getElementById('adminAlert');
+
+            adminForm.onsubmit = function(e) {
+                e.preventDefault();
+
+                const bookData = {
+                    title: document.getElementById('adminTitle').value,
+                    author: document.getElementById('adminAuthor').value,
+                    category: document.getElementById('adminCategory').value,
+                    year: document.getElementById('adminYear').value,
+                    isbn: document.getElementById('adminISBN').value,
+                    copies: parseInt(document.getElementById('adminCopies').value)
+                };
+
+                if (editingBookId) {
+                    // Update existing book
+                    const book = booksData.find(b => b.id === editingBookId);
+                    if (book) {
+                        Object.assign(book, bookData);
+                        showAlert(adminAlert, `Книгата "${bookData.title}" е успешно ажурирана.`, 'success');
+                    }
+                    editingBookId = null;
+                } else {
+                    // Add new book
+                    const newBook = {
+                        id: booksData.length + 1,
+                        ...bookData,
+                        available: bookData.copies,
+                        coverImage: `https://readdy.ai/api/search-image?query=Book%20cover%20$%7BbookData.title%7D%20$%7BbookData.author%7D%20literature%20classic%20edition%20simple%20background%20minimalist%20design%20elegant%20typography%20professional%20publishing&width=300&height=450&seq=newbook${Date.now()}&orientation=portrait`,
+                        description: `Класично дело од ${bookData.author} - ${bookData.title}.`
+                    };
+                    booksData.push(newBook);
+                    showAlert(adminAlert, `Книгата "${bookData.title}" е успешно додадена.`, 'success');
+                }
+
+                // Reset form
+                adminForm.reset();
+                document.getElementById('adminSubmitText').textContent = 'Додади книга';
+                adminCancelBtn.style.display = 'none';
+                renderAdminTable();
+            };
+
+            adminCancelBtn.onclick = function() {
+                editingBookId = null;
+                adminForm.reset();
+                document.getElementById('adminSubmitText').textContent = 'Додади книга';
+                adminCancelBtn.style.display = 'none';
+            };
+        }
+
+        function editBook(bookId) {
+            const book = booksData.find(b => b.id === bookId);
+            if (book) {
+                editingBookId = bookId;
+                document.getElementById('adminTitle').value = book.title;
+                document.getElementById('adminAuthor').value = book.author;
+                document.getElementById('adminCategory').value = book.category;
+                document.getElementById('adminYear').value = book.year;
+                document.getElementById('adminISBN').value = book.isbn;
+                document.getElementById('adminCopies').value = book.copies;
+                document.getElementById('adminSubmitText').textContent = 'Зачувај промени';
+                document.getElementById('adminCancelBtn').style.display = 'inline-flex';
+                
+                // Scroll to form
+                document.getElementById('adminForm').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function deleteBook(bookId) {
+            const book = booksData.find(b => b.id === bookId);
+            if (book && confirm(`Дали сте сигурни дека сакате да ја избришете книгата "${book.title}"?`)) {
+                const index = booksData.findIndex(b => b.id === bookId);
+                if (index > -1) {
+                    booksData.splice(index, 1);
+                    const adminAlert = document.getElementById('adminAlert');
+                    showAlert(adminAlert, `Книгата "${book.title}" е успешно избришена.`, 'success');
+                    renderAdminTable();
+                }
+            }
+        }
+
+        // Make functions available globally
+        window.editBook = editBook;
+        window.deleteBook = deleteBook;
+
+        // ===== UTILITY FUNCTIONS =====
+        function showAlert(alertElement, message, type) {
+            alertElement.textContent = message;
+            alertElement.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'} show`;
+            
+            setTimeout(() => {
+                alertElement.classList.remove('show');
+            }, 5000);
+        }
+
+        // ===== INVENTORY SECTION =====
+        function initInventorySection() {
+            // Update stats
+            const totalTitles = booksData.length;
+            const totalCopies = booksData.reduce((sum, b) => sum + b.copies, 0);
+            const availableCopies = booksData.reduce((sum, b) => sum + b.available, 0);
+            const borrowedCopies = totalCopies - availableCopies;
+
+            document.getElementById('totalTitlesCount').textContent = totalTitles;
+            document.getElementById('totalCopiesCount').textContent = totalCopies;
+            document.getElementById('availableCopiesCount').textContent = availableCopies;
+            document.getElementById('borrowedCopiesCount').textContent = borrowedCopies;
+
+            // Filter buttons
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.onclick = function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderInventoryTable();
+                };
+            });
+
+            // Sort select
+            document.getElementById('inventorySort').onchange = renderInventoryTable;
+
+            renderInventoryTable();
+        }
+
+        function renderInventoryTable() {
+            const activeFilter = document.querySelector('.filter-btn.active');
+            const filterValue = activeFilter ? activeFilter.getAttribute('data-filter') : 'all';
+            const sortValue = document.getElementById('inventorySort').value;
+
+            let books = [...booksData];
+
+            // Filter
+            if (filterValue === 'available') {
+                books = books.filter(b => b.available > 0);
+            } else if (filterValue === 'unavailable') {
+                books = books.filter(b => b.available === 0);
+            }
+
+            // Sort
+            if (sortValue === 'title') {
+                books.sort((a, b) => a.title.localeCompare(b.title, 'mk'));
+            } else if (sortValue === 'available') {
+                books.sort((a, b) => b.available - a.available);
+            } else if (sortValue === 'total') {
+                books.sort((a, b) => b.copies - a.copies);
+            }
+
+            const tbody = document.getElementById('inventoryTableBody');
+
+            if (books.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 2rem; color: #64748b;">Нема книги за прикажување</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = books.map(book => {
+                const borrowed = book.copies - book.available;
+                const percent = book.copies > 0 ? Math.round((book.available / book.copies) * 100) : 0;
+                const barClass = percent >= 60 ? 'high' : percent >= 30 ? 'medium' : 'low';
+                const statusBadge = book.available > 0
+                    ? `<span class="badge badge-success">Достапна</span>`
+                    : `<span class="badge badge-danger">Недостапна</span>`;
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="book-cell">
+                                <img src="${book.coverImage}" alt="${book.title}" class="book-thumbnail">
+                                <div class="book-cell-info">
+                                    <span class="book-cell-title">${book.title}</span>
+                                    <span style="font-size:0.75rem;color:#64748b;">${book.year} година</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${book.author}</td>
+                        <td><span class="badge badge-info">${book.category}</span></td>
+                        <td style="font-family:monospace;font-size:0.8rem;">${book.isbn}</td>
+                        <td style="text-align:center;font-weight:600;">${book.copies}</td>
+                        <td style="text-align:center;">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar ${barClass}" style="width:${percent}%"></div>
+                            </div>
+                            <span class="progress-text">${book.available} / ${book.copies}</span>
+                        </td>
+                        <td style="text-align:center;font-weight:600;color:${borrowed > 0 ? '#f59e0b' : '#94a3b8'};">${borrowed}</td>
+                        <td>${statusBadge}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        window.renderInventoryTable = renderInventoryTable;
+    </script>
+</body>
+</html>
